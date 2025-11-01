@@ -4,44 +4,54 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import pt.ips.pointsystem.ui.theme.PointSystemTheme
+import androidx.navigation.compose.rememberNavController
+import pt.ips.pointsystem.navigation.NavGraph
+import pt.ips.pointsystem.navigation.Navigation
+import pt.ips.pointsystem.ui.HomeScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            PointSystemTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+            App()
+        }
+    }
+}
+
+@Preview(showSystemUi = true)
+@Composable
+fun AppPreview() {
+    val fakeNavController = rememberNavController()
+    Scaffold(
+        bottomBar = {
+            Navigation(fakeNavController)
+        }
+    ) {
+        Box(modifier = Modifier.padding(it)) {
+            HomeScreen()
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+fun App() {
+    val navController = rememberNavController()
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    PointSystemTheme {
-        Greeting("Android")
+    Scaffold(
+        bottomBar = {
+            Navigation(navController)
+        }
+    ) { innerPadding ->
+        NavGraph(
+            navController = navController,
+            padding = innerPadding
+        )
     }
 }
