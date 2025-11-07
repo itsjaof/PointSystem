@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import pt.ips.pointsystem.model.Screen
 import pt.ips.pointsystem.ui.HistoricoScreen
 import pt.ips.pointsystem.ui.HomeScreen
+import pt.ips.pointsystem.ui.LoginScreen
 import pt.ips.pointsystem.ui.PerfilScreen
 import pt.ips.pointsystem.ui.PontoScreen
 
@@ -17,9 +18,12 @@ import pt.ips.pointsystem.ui.PontoScreen
 fun NavGraph(navController: NavHostController, padding: PaddingValues) {
     NavHost(
         navController = navController,
-        startDestination = Screen.Home.route,
+        startDestination = "login",
         modifier = Modifier.padding(padding)
     ) {
+        composable("login") {
+            LoginScreen(navController = navController)
+        }
         composable(Screen.Home.route) { HomeScreen() }
         composable(Screen.Ponto.route) { PontoScreen() }
         composable(Screen.Historico.route) { HistoricoScreen() }
