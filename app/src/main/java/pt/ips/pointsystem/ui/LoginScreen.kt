@@ -29,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,15 +40,23 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import kotlinx.coroutines.launch
+import pt.ips.pointsystem.services.AppWriteClient
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(navController: NavController) {
     val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var loginMessage by remember { mutableStateOf("") }
+
+    val accountService = remember {
+        AppWriteClient.getInstance(context)
+        AppWriteClient.account
+    }
 
     Box(
         modifier = Modifier
@@ -125,14 +134,11 @@ fun LoginScreen(navController: NavController) {
                 // Botão de Login
                 Button(
                     onClick = {
-                        if (email == "admin@test.com" && password == "1234") {
-                            navController.navigate("home") {
-                                popUpTo("login") { inclusive = true }
-                                launchSingleTop = true
+                        coroutineScope.launch {
+                            if(accountService.login(email, password) != null) {
+                                loginMessage = "Login realizado com sucesso!"
+                                navController.navigate("home")
                             }
-                        } else {
-                            loginMessage = "Credenciais inválidas."
-                            Toast.makeText(context, "Email ou senha incorretos!", Toast.LENGTH_SHORT).show()
                         }
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),

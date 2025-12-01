@@ -37,7 +37,7 @@ fun AppPreview() {
         }
     ) {
         Box(modifier = Modifier.padding(it)) {
-            HomeScreen()
+            HomeScreen(fakeNavController)
         }
     }
 }
@@ -55,7 +55,7 @@ fun App() {
     ) { innerPadding ->
         NavGraph(
             navController = navController,
-            padding = innerPadding
+            padding = innerPadding,
         )
     }
 }
