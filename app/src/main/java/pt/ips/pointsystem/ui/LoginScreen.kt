@@ -138,6 +138,8 @@ fun LoginScreen(navController: NavController) {
                             if(accountService.login(email, password) != null) {
                                 loginMessage = "Login realizado com sucesso!"
                                 navController.navigate("home")
+                            } else {
+                                loginMessage = "Credenciais inválidas."
                             }
                         }
                     },
