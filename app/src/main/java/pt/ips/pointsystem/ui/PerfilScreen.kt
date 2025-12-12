@@ -17,15 +17,21 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.launch
+import pt.ips.pointsystem.services.AppWriteClient
 
 // --- Definição de Cores aproximadas ---
 val BackgroundColor = Color(0xFFF8F9FA) // Cinza muito claro para o fundo da tela
@@ -39,7 +45,7 @@ val TextDark = Color(0xFF1A1C1E)
 val TextGrey = Color(0xFF6C757D)
 
 @Composable
-fun PerfilScreen() {
+fun PerfilScreen(navController: NavController) {
     // Scroll state para permitir rolar a tela se o ecrã for pequeno
     val scrollState = rememberScrollState()
 
@@ -85,7 +91,7 @@ fun PerfilScreen() {
         Spacer(modifier = Modifier.height(24.dp))
 
         // --- Botão de Logout ---
-        LogoutButton()
+        LogoutButton(navController)
 
         // Espaço extra no final
         Spacer(modifier = Modifier.height(32.dp))
@@ -318,9 +324,25 @@ fun SettingsCard() {
 }
 
 @Composable
-fun LogoutButton() {
+fun LogoutButton(navController: NavController) {
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+
+    AppWriteClient.getInstance(context)
+    val accountService = AppWriteClient.account
+
     OutlinedButton(
-        onClick = { /* Ação vazia */ },
+        onClick = {
+            coroutineScope.launch {
+                accountService.logout()
+                navController.navigate("login") {
+                    popUpTo(navController.graph.startDestinationId) {
+                        inclusive = true
+                    }
+                    launchSingleTop = true
+                }
+            }
+        },
         modifier = Modifier
             .fillMaxWidth()
             .height(50.dp),
@@ -344,6 +366,6 @@ fun LogoutButton() {
 @Composable
 fun ProfileScreenPreview() {
     MaterialTheme {
-        PerfilScreen()
+        PerfilScreen(rememberNavController())
     }
 }

@@ -27,6 +27,6 @@ fun NavGraph(navController: NavHostController, padding: PaddingValues) {
         composable(Screen.Home.route) { HomeScreen(navController) }
         composable(Screen.Ponto.route) { PontoScreen() }
         composable(Screen.Historico.route) { HistoricoScreen() }
-        composable(Screen.Perfil.route) { PerfilScreen() }
+        composable(Screen.Perfil.route) { PerfilScreen(navController) }
     }
 }
