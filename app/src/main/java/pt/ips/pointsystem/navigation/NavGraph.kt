@@ -19,12 +19,12 @@ fun NavGraph(navController: NavHostController, padding: PaddingValues) {
     NavHost(
         navController = navController,
         startDestination = "login",
-        modifier = Modifier.padding(padding)
+            modifier = Modifier.padding(padding)
     ) {
         composable("login") {
             LoginScreen(navController = navController)
         }
-        composable(Screen.Home.route) { HomeScreen() }
+        composable(Screen.Home.route) { HomeScreen(navController) }
         composable(Screen.Ponto.route) { PontoScreen() }
         composable(Screen.Historico.route) { HistoricoScreen() }
         composable(Screen.Perfil.route) { PerfilScreen() }
