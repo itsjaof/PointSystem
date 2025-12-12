@@ -1,3 +1,6 @@
+package pt.ips.pointsystem.ui
+
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -6,9 +9,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ExitToApp
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.outlined.ExitToApp
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -324,11 +327,11 @@ fun LogoutButton() {
         colors = ButtonDefaults.outlinedButtonColors(
             contentColor = RedLogout
         ),
-        border = androidx.compose.foundation.BorderStroke(1.dp, RedLogout),
+        border = BorderStroke(1.dp, RedLogout),
         shape = RoundedCornerShape(12.dp)
     ) {
         Icon(
-            imageVector = Icons.Outlined.ExitToApp,
+            imageVector = Icons.AutoMirrored.Outlined.ExitToApp,
             contentDescription = null,
             modifier = Modifier.size(20.dp)
         )

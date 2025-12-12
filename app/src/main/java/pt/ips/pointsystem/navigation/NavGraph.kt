@@ -1,6 +1,6 @@
 package pt.ips.pointsystem.navigation
 
-import PerfilScreen
+import pt.ips.pointsystem.ui.PerfilScreen
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
