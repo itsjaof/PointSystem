@@ -1,7 +1,9 @@
 package pt.ips.pointsystem.services
 
 import android.util.Log
+import androidx.activity.ComponentActivity
 import io.appwrite.Client
+import io.appwrite.enums.OAuthProvider
 import io.appwrite.exceptions.AppwriteException
 import io.appwrite.models.User
 import io.appwrite.services.Account
@@ -35,6 +37,23 @@ class AccountService(client: Client) {
                 getLoggedIn()
             } catch (ex: AppwriteException) {
                 Log.e("AccountService", "Erro: ${ex.message}")
+                null
+            }
+        }
+    }
+
+    suspend fun loginWithGoogle(activity: ComponentActivity): Unit? {
+        return withContext(Dispatchers.IO) {
+            try {
+                account.createOAuth2Session(
+                    activity,
+                    provider = OAuthProvider.GOOGLE
+                )
+            } catch (ex: AppwriteException) {
+                Log.e("AccountService", "Erro: ${ex.message}")
+                null
+            } catch (ex: IllegalStateException) {
+                Log.e("AccountService", "O processo de login foi interrompido: ${ex.message}")
                 null
             }
         }
