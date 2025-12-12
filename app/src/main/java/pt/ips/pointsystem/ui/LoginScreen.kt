@@ -1,6 +1,7 @@
 package pt.ips.pointsystem.ui
 
 import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,6 +27,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,6 +42,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import pt.ips.pointsystem.services.AppWriteClient
@@ -56,6 +62,33 @@ fun LoginScreen(navController: NavController) {
     val accountService = remember {
         AppWriteClient.getInstance(context)
         AppWriteClient.account
+    }
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    // Este bloco corre sempre que o ciclo de vida muda (ex: Pausa -> Resume)
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            // Se a app a   cabou de "acordar" (voltar do browser)
+            if (event == Lifecycle.Event.ON_RESUME) {
+                coroutineScope.launch {
+                    val user = accountService.getLoggedIn()
+                    if (user != null) {
+                        navController.navigate("home") {
+                            popUpTo("login") { inclusive = true }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Adiciona o observador
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        // Remove o observador quando o ecrã é destruído (limpeza)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
     }
 
     Box(
@@ -156,7 +189,15 @@ fun LoginScreen(navController: NavController) {
                 // Botão de Login com Google (ainda não funcional)
                 Button(
                     onClick = {
-                        Toast.makeText(context, "Login com Google (em breve)", Toast.LENGTH_SHORT).show()
+                        // Toast.makeText(context, "Login com Google (em breve)", Toast.LENGTH_SHORT).show()
+
+                        val activity = context as? ComponentActivity
+
+                        coroutineScope.launch {
+                            if(activity != null) {
+                                accountService.loginWithGoogle(activity)
+                            }
+                        }
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
                     modifier = Modifier
