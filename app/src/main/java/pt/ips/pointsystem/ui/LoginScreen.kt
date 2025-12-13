@@ -1,6 +1,5 @@
 package pt.ips.pointsystem.ui
 
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -28,7 +27,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,7 +47,9 @@ import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import pt.ips.pointsystem.services.AppWriteClient
 
+
 @OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun LoginScreen(navController: NavController) {
     val context = LocalContext.current
