@@ -36,8 +36,8 @@ fun PontoScreen() {
         }
     }
 
-    val timeFormat = SimpleDateFormat("HH:mm:ss", Locale("pt", "PT"))
-    val dateFormat = SimpleDateFormat("EEEE, d 'de' MMMM 'de' yyyy", Locale("pt", "PT"))
+    val timeFormat = SimpleDateFormat("HH:mm:ss", Locale.forLanguageTag("pt-PT"))
+    val dateFormat = SimpleDateFormat("EEEE, d 'de' MMMM 'de' yyyy", Locale.forLanguageTag("pt-PT"))
 
     Column(
         modifier = Modifier
