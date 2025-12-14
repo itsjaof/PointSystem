@@ -94,7 +94,7 @@ fun Header(){
         }
     }
 
-    var time = SimpleDateFormat("HH:mm", Locale("pt", "PT"))
+    val time = SimpleDateFormat("HH:mm", Locale.forLanguageTag("pt-PT"))
 
     Row(
         modifier = Modifier
