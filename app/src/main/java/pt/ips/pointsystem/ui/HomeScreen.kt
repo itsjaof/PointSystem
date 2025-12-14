@@ -1,6 +1,5 @@
 package pt.ips.pointsystem.ui
 
-import android.preference.PreferenceActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,8 +22,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -48,9 +45,7 @@ import java.util.Locale
 
 @Preview(showBackground = true)
 @Composable
-fun HomeScreen(
-    modifier: Modifier = Modifier
-) {
+fun HomeScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -87,7 +82,6 @@ fun HomeScreen(
     }
 }
 
-//@Preview
 @Composable
 fun Header(){
 
@@ -158,7 +152,6 @@ fun Header(){
 
 }
 
-//@Preview
 @Composable
 fun Status(){
     Card(
@@ -199,7 +192,6 @@ fun Status(){
     }
 }
 
-//@Preview
 @Composable
 fun GridInformation(){
     Column {
