@@ -39,6 +39,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.delay
 import pt.ips.pointsystem.ui.theme.BackgroundColor
 import pt.ips.pointsystem.ui.theme.CardBackgroundColor
@@ -51,7 +53,7 @@ import java.util.Locale
 
 @Preview
 @Composable
-fun PontoScreen() {
+fun PontoScreen(navController: NavController = rememberNavController()) {
     val scrollState = rememberScrollState()
     var currentTime by remember { mutableStateOf(Date()) }
 
@@ -245,7 +247,9 @@ fun PontoScreen() {
 
         // ---------------- BOTÕES ----------------
         Button(
-            onClick = {},
+            onClick = {
+                navController.navigate("nfcScan")
+            },
             modifier = Modifier.fillMaxWidth().height(56.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2E7D32)),
             shape = RoundedCornerShape(12.dp)

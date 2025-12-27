@@ -12,10 +12,11 @@ import pt.ips.pointsystem.model.Screen
 import pt.ips.pointsystem.ui.HistoricoScreen
 import pt.ips.pointsystem.ui.HomeScreen
 import pt.ips.pointsystem.ui.LoginScreen
+import pt.ips.pointsystem.ui.NfcScanScreen
 import pt.ips.pointsystem.ui.PontoScreen
 
 @Composable
-fun NavGraph(navController: NavHostController, padding: PaddingValues) {
+fun NavGraph(navController: NavHostController, padding: PaddingValues, nfcCode: String?, onCodeConsumed: () -> Unit) {
     NavHost(
         navController = navController,
         startDestination = "login",
@@ -25,8 +26,9 @@ fun NavGraph(navController: NavHostController, padding: PaddingValues) {
             LoginScreen(navController = navController)
         }
         composable(Screen.Home.route) { HomeScreen() }
-        composable(Screen.Ponto.route) { PontoScreen() }
+        composable(Screen.Ponto.route) { PontoScreen(navController) }
         composable(Screen.Historico.route) { HistoricoScreen() }
         composable(Screen.Perfil.route) { PerfilScreen(navController) }
+        composable("nfcScan") { NfcScanScreen(navController, nfcCode, onCodeConsumed) }
     }
 }
