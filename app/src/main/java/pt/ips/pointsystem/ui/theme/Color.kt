@@ -9,3 +9,10 @@ val Pink80 = Color(0xFFEFB8C8)
 val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
+
+// Cores compartilhadas para design uniforme
+val BackgroundColor = Color(0xFFF8F9FA)
+val CardBackgroundColor = Color.White
+val CardBorderColor = Color(0xFFEEEEEE)
+val TextDark = Color(0xFF1A1C1E)
+val TextGrey = Color(0xFF6C757D)
