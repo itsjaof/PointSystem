@@ -2,6 +2,7 @@ package pt.ips.pointsystem.ui
 
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +24,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,13 +41,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import pt.ips.pointsystem.services.AppWriteClient
+import pt.ips.pointsystem.ui.theme.BackgroundColor
+import pt.ips.pointsystem.ui.theme.CardBackgroundColor
+import pt.ips.pointsystem.ui.theme.CardBorderColor
+import pt.ips.pointsystem.ui.theme.TextDark
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -69,7 +74,7 @@ fun LoginScreen(navController: NavController) {
     // Este bloco corre sempre que o ciclo de vida muda (ex: Pausa -> Resume)
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
-            // Se a app a   cabou de "acordar" (voltar do browser)
+            // Se a app acabou de "acordar" (voltar do browser)
             if (event == Lifecycle.Event.ON_RESUME) {
                 coroutineScope.launch {
                     val user = accountService.getLoggedIn()
@@ -94,15 +99,16 @@ fun LoginScreen(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F5F5)),
+            .background(BackgroundColor),
         contentAlignment = Alignment.Center
     ) {
         Card(
             shape = RoundedCornerShape(16.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+            colors = CardDefaults.cardColors(containerColor = CardBackgroundColor),
             modifier = Modifier
                 .fillMaxWidth(0.85f)
-                .height(600.dp)
+                .border(1.dp, CardBorderColor, RoundedCornerShape(16.dp))
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -136,8 +142,9 @@ fun LoginScreen(navController: NavController) {
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = "PointSystem",
+                            style = MaterialTheme.typography.headlineSmall,
                             fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp
+                            color = TextDark
                         )
                     }
                 }
@@ -168,20 +175,27 @@ fun LoginScreen(navController: NavController) {
                 Button(
                     onClick = {
                         coroutineScope.launch {
-                            if(accountService.login(email, password) != null) {
-                                loginMessage = "Login realizado com sucesso!"
-                                navController.navigate("home")
-                            } else {
-                                loginMessage = "Credenciais inválidas."
+                            loginMessage = ""
+                            try {
+                                val user = accountService.login(email, password)
+                                if (user != null) {
+                                    loginMessage = "Login realizado com sucesso!"
+                                    navController.navigate("home")
+                                } else {
+                                    loginMessage = "Credenciais inválidas ou erro de conexão."
+                                }
+                            } catch (_: Exception) {
+                                loginMessage = "Erro de conexão. Tente novamente."
                             }
                         }
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                    colors = ButtonDefaults.buttonColors(containerColor = TextDark),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(48.dp)
+                        .height(50.dp),
+                    shape = RoundedCornerShape(12.dp)
                 ) {
-                    Text("Login", color = Color.White)
+                    Text("Login", color = Color.White, fontWeight = FontWeight.Medium)
                 }
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -199,12 +213,13 @@ fun LoginScreen(navController: NavController) {
                             }
                         }
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                    colors = ButtonDefaults.buttonColors(containerColor = TextDark),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(48.dp)
+                        .height(50.dp),
+                    shape = RoundedCornerShape(12.dp)
                 ) {
-                    Text("Login With Google", color = Color.White)
+                    Text("Login With Google", color = Color.White, fontWeight = FontWeight.Medium)
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))

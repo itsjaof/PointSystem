@@ -32,8 +32,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import pt.ips.pointsystem.ui.theme.BackgroundColor
+import pt.ips.pointsystem.ui.theme.TextDark
+import pt.ips.pointsystem.ui.theme.TextGrey
 
 
 data class Picagem(
@@ -87,18 +91,21 @@ fun HistoricoScreen(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
+            .background(BackgroundColor)
             .padding(horizontal = 16.dp)
     ) {
 
         Text(
             text = "Histórico de Picagens",
-            style = MaterialTheme.typography.headlineSmall,
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold,
+            color = TextDark,
             modifier = Modifier.padding(top = 16.dp)
         )
 
         Text(
             text = "Consulte os seus registos anteriores",
-            color = Color.Gray,
+            color = TextGrey,
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.padding(bottom = 16.dp)
         )

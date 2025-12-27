@@ -1,8 +1,8 @@
 package pt.ips.pointsystem.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ShowChart
 import androidx.compose.material.icons.filled.AccessTime
@@ -31,14 +33,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
+import pt.ips.pointsystem.ui.theme.BackgroundColor
+import pt.ips.pointsystem.ui.theme.CardBackgroundColor
+import pt.ips.pointsystem.ui.theme.CardBorderColor
+import pt.ips.pointsystem.ui.theme.TextDark
+import pt.ips.pointsystem.ui.theme.TextGrey
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -46,45 +51,42 @@ import java.util.Locale
 @Preview(showBackground = true)
 @Composable
 fun HomeScreen() {
-    Box(
+    val scrollState = rememberScrollState()
+    
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(BackgroundColor)
+            .padding(horizontal = 16.dp)
+            .verticalScroll(scrollState)
     ) {
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(220.dp)
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                            Color(0xFF9712FA),
-                            Color(0xFF5039F7)
-                        )
-                    )
-                )
+        Text(
+            text = "Ecrã Inicial",
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold,
+            color = TextDark,
+            modifier = Modifier.padding(top = 16.dp)
+        )
+        Text(
+            text = "Visão geral do seu trabalho",
+            style = MaterialTheme.typography.bodyMedium,
+            color = TextGrey,
+            modifier = Modifier.padding(bottom = 24.dp)
         )
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp)
-        ) {
+        Status()
 
-            Header()
+        Spacer(modifier = Modifier.height(16.dp))
 
-            Status()
-
-            GridInformation()
-
-        }
+        GridInformation()
+        
+        Spacer(modifier = Modifier.height(32.dp))
     }
 }
 
-@Composable
-fun Header(){
 
+@Composable
+fun Status(){
     var currentTime by remember { mutableStateOf(Date()) }
 
     LaunchedEffect(Unit) {
@@ -95,99 +97,50 @@ fun Header(){
     }
 
     val time = SimpleDateFormat("HH:mm", Locale.forLanguageTag("pt-PT"))
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 8.dp, bottom = 16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.Top
-    ) {
-        Column {
-            Text(
-                text = "Bem-vindo de volta,",
-                color = Color.White,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier
-                    .padding(4.dp)
-            )
-            Text(
-                text = "Tiago Dores",
-                color = Color.White,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 15.sp,
-                modifier = Modifier
-                    .padding(4.dp)
-            )
-            Text(
-                text = "Desenvolvedor",
-                color = Color.White,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier
-                    .padding(4.dp)
-            )
-        }
-
-        Column(
-            horizontalAlignment = Alignment.End
-        ) {
-            Text(
-                text = "Agora",
-                color = Color.White,
-                style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier
-                    .padding( top = 15.dp, end = 8.dp)
-
-            )
-            Text(
-                text = time.format(currentTime),
-                color = Color.White,
-                fontWeight = FontWeight.Normal,
-                fontSize = 24.sp,
-                modifier = Modifier
-                    .padding(end = 8.dp)
-            )
-        }
-    }
-
-}
-
-@Composable
-fun Status(){
+    
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(80.dp),
-        shape = RoundedCornerShape(20.dp),
+            .border(1.dp, CardBorderColor, RoundedCornerShape(16.dp)),
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFF7724F9)
+            containerColor = CardBackgroundColor
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Row(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
+                .fillMaxWidth()
+                .padding(20.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column {
                 Text(
-                    text = "Trabalhando",
-                    color = Color.White,
-                    style = MaterialTheme.typography.titleMedium
+                    text = "Estado Atual",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Medium,
+                    color = TextDark
                 )
                 Text(
-                    text = "Desde 08:45",
-                    color = Color.White.copy(alpha = 0.7f),
-                    style = MaterialTheme.typography.bodyMedium
+                    text = "Trabalhando desde 08:45",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = TextGrey
                 )
             }
-            Text(
-                text = "5.5h hoje",
-                color = Color.White,
-                style = MaterialTheme.typography.titleMedium
-            )
+            Column(horizontalAlignment = Alignment.End) {
+                Text(
+                    text = time.format(currentTime),
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = TextDark
+                )
+                Text(
+                    text = "5.5h hoje",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = TextGrey
+                )
+            }
         }
     }
 }
@@ -245,39 +198,62 @@ fun StatisticBlock(
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier.height(250.dp),
+        modifier = modifier
+            .height(200.dp)
+            .border(1.dp, CardBorderColor, RoundedCornerShape(16.dp)),
         shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        colors = CardDefaults.cardColors(containerColor = CardBackgroundColor)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(20.dp)) {
             Icon(
                 imageVector = imageVector,
                 contentDescription = null,
-                tint = iconColor
+                tint = iconColor,
+                modifier = Modifier.padding(bottom = 12.dp)
             )
 
-            Spacer(modifier = Modifier.height(30.dp))
-            Text(text = title, style = MaterialTheme.typography.bodyMedium)
+            Text(
+                text = title,
+                style = MaterialTheme.typography.bodyMedium,
+                color = TextGrey,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
 
-            Text(text = "5.5h", style = MaterialTheme.typography.headlineMedium)
+            Text(
+                text = "5.5h",
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold,
+                color = TextDark
+            )
 
-            Spacer(modifier = Modifier.height(70.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             val progress = 0.69f // 69%
             LinearProgressIndicator(
                 progress = { progress },
-                modifier = Modifier.fillMaxWidth().height(4.dp),
+                modifier = Modifier.fillMaxWidth().height(6.dp),
                 color = iconColor,
-                trackColor = Color.LightGray
+                trackColor = Color(0xFFE0E0E0)
             )
+
+            Spacer(modifier = Modifier.height(8.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = "Meta: 8h", style = MaterialTheme.typography.bodySmall)
-                Text(text = "69%", style = MaterialTheme.typography.bodySmall)
+                Text(
+                    text = "Meta: 8h",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = TextGrey
+                )
+                Text(
+                    text = "69%",
+                    style = MaterialTheme.typography.bodySmall,
+                    fontWeight = FontWeight.Medium,
+                    color = TextDark
+                )
             }
         }
     }

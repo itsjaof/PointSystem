@@ -3,17 +3,36 @@ package pt.ips.pointsystem.ui
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ExitToApp
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material3.*
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,17 +51,17 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import pt.ips.pointsystem.services.AppWriteClient
+import pt.ips.pointsystem.ui.theme.BackgroundColor
+import pt.ips.pointsystem.ui.theme.CardBackgroundColor
+import pt.ips.pointsystem.ui.theme.TextDark
+import pt.ips.pointsystem.ui.theme.TextGrey
 
-// --- Definição de Cores aproximadas ---
-val BackgroundColor = Color(0xFFF8F9FA) // Cinza muito claro para o fundo da tela
-val CardBackgroundColor = Color.White
+// --- Definição de Cores específicas do PerfilScreen ---
 val PrimaryBlue = Color(0xFF2D4B73) // Azul do avatar
 val LightGreyItem = Color(0xFFF1F5F9) // Fundo dos items de texto
 val GreenStats = Color(0xFF00C853) // Verde do ícone de horas
 val GreenStatsBg = Color(0xFFE8F5E9) // Fundo verde claro
 val RedLogout = Color(0xFFB00020)
-val TextDark = Color(0xFF1A1C1E)
-val TextGrey = Color(0xFF6C757D)
 
 @Composable
 fun PerfilScreen(navController: NavController) {
