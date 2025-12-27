@@ -37,7 +37,7 @@ fun AppPreview() {
         }
     ) {
         Box(modifier = Modifier.padding(it)) {
-            HomeScreen(fakeNavController)
+            HomeScreen()
         }
     }
 }
