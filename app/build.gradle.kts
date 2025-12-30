@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.compose.material.icons.extended) // Icones da aplicação
     implementation("io.appwrite:sdk-for-android:6.0.0") // Import do Appwrite
+    implementation("com.google.android.gms:play-services-location:21.0.1") // Serviços de localização
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
