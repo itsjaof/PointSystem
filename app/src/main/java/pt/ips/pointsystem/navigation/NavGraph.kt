@@ -16,7 +16,7 @@ import pt.ips.pointsystem.ui.NfcScanScreen
 import pt.ips.pointsystem.ui.PontoScreen
 
 @Composable
-fun NavGraph(navController: NavHostController, padding: PaddingValues, nfcCode: String?, onCodeConsumed: () -> Unit) {
+fun NavGraph(navController: NavHostController, padding: PaddingValues, nfcCode: String?, onCodeConsumed: () -> Unit, onPicagemValia: (String, Double, Double) -> Unit) {
     NavHost(
         navController = navController,
         startDestination = "login",
@@ -29,6 +29,6 @@ fun NavGraph(navController: NavHostController, padding: PaddingValues, nfcCode: 
         composable(Screen.Ponto.route) { PontoScreen(navController) }
         composable(Screen.Historico.route) { HistoricoScreen() }
         composable(Screen.Perfil.route) { PerfilScreen(navController) }
-        composable("nfcScan") { NfcScanScreen(navController, nfcCode, onCodeConsumed) }
+        composable("nfcScan") { NfcScanScreen(navController, nfcCode, onCodeConsumed, onPicagemValia) }
     }
 }
