@@ -8,7 +8,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
@@ -16,14 +20,13 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import pt.ips.pointsystem.model.Picagem
+import pt.ips.pointsystem.model.PicagemType
 import pt.ips.pointsystem.navigation.NavGraph
 import pt.ips.pointsystem.navigation.Navigation
 import pt.ips.pointsystem.services.AccountService
 import pt.ips.pointsystem.services.AppWriteClient
-import pt.ips.pointsystem.services.DatabaseService
 import pt.ips.pointsystem.services.NfcService
 import pt.ips.pointsystem.ui.HomeScreen
-import java.time.Instant
 
 class MainActivity : ComponentActivity() {
     private lateinit var nfcService: NfcService
@@ -38,11 +41,16 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
+            var selectedType by remember { mutableStateOf(PicagemType.ENTRADA) }
+
             App(
                 nfcCode = scannedTagId,
                 onClearCode = { scannedTagId = null },
                 onRegistarPonto = { idCartao, lat, long ->
-                    registerPunch(idCartao, lat, long)
+                    registerPunch(idCartao, lat, long, selectedType)
+                },
+                onTypeSelected = { type ->
+                    selectedType = type
                 }
             )
         }
@@ -58,38 +66,38 @@ class MainActivity : ComponentActivity() {
         nfcService.disableReader()
     }
 
-    private fun registerPunch(nfcId: String, latitude: Double, longitude: Double) {
+    private fun registerPunch(nfcId: String, latitude: Double, longitude: Double, type: PicagemType) {
         lifecycleScope.launch {
             val account = AccountService(AppWriteClient.client).getLoggedIn()
 
             try {
                 if (account != null) {
-                    Log.d("AccountService", "USER ID: ${account.id}")
-
-                    val data = Picagem(
-                        account.id,
-                        nfcId,
-                        latitude,
-                        longitude,
-                        Instant.now().toString()
+                    val picagem = Picagem(
+                        userId = account.id,
+                        nfcId = nfcId,
+                        latitude = latitude,
+                        longitude = longitude,
+                        type = type
                     )
-
-                    DatabaseService().store(
-                        data.collectionId,
-                        data.toMap()
-                    )
+                    
+                    picagem.registerPunch(type, nfcId, latitude, longitude)
                 } else {
                     Log.e("RegisterPunch", "O utilizado não tem sessão.")
                 }
             } catch (ex: Exception) {
-                Log.e("RegisterPunch", "Erro ao obt er o utilizador ou registar a picagem", ex)
+                Log.e("RegisterPunch", "Erro ao obter o utilizador ou registar a picagem", ex)
             }
         }
     }
 }
 
 @Composable
-fun App(nfcCode: String? = null, onClearCode: () -> Unit = {}, onRegistarPonto: (String, Double, Double) -> Unit) {
+fun App(
+    nfcCode: String? = null, 
+    onClearCode: () -> Unit = {}, 
+    onRegistarPonto: (String, Double, Double) -> Unit,
+    onTypeSelected: (PicagemType) -> Unit = {}
+) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -106,7 +114,8 @@ fun App(nfcCode: String? = null, onClearCode: () -> Unit = {}, onRegistarPonto: 
             padding = innerPadding,
             nfcCode = nfcCode,
             onCodeConsumed = onClearCode,
-            onPicagemValia = onRegistarPonto
+            onPicagemValia = onRegistarPonto,
+            onTypeSelected = onTypeSelected
         )
     }
 }

@@ -1,6 +1,5 @@
 package pt.ips.pointsystem.navigation
 
-import pt.ips.pointsystem.ui.PerfilScreen
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -8,15 +7,24 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import pt.ips.pointsystem.model.PicagemType
 import pt.ips.pointsystem.model.Screen
 import pt.ips.pointsystem.ui.HistoricoScreen
 import pt.ips.pointsystem.ui.HomeScreen
 import pt.ips.pointsystem.ui.LoginScreen
 import pt.ips.pointsystem.ui.NfcScanScreen
+import pt.ips.pointsystem.ui.PerfilScreen
 import pt.ips.pointsystem.ui.PontoScreen
 
 @Composable
-fun NavGraph(navController: NavHostController, padding: PaddingValues, nfcCode: String?, onCodeConsumed: () -> Unit, onPicagemValia: (String, Double, Double) -> Unit) {
+fun NavGraph(
+    navController: NavHostController, 
+    padding: PaddingValues, 
+    nfcCode: String?, 
+    onCodeConsumed: () -> Unit, 
+    onPicagemValia: (String, Double, Double) -> Unit,
+    onTypeSelected: (PicagemType) -> Unit
+) {
     NavHost(
         navController = navController,
         startDestination = "login",
@@ -26,7 +34,9 @@ fun NavGraph(navController: NavHostController, padding: PaddingValues, nfcCode: 
             LoginScreen(navController = navController)
         }
         composable(Screen.Home.route) { HomeScreen() }
-        composable(Screen.Ponto.route) { PontoScreen(navController) }
+        composable(Screen.Ponto.route) { 
+            PontoScreen(navController, onTypeSelected = onTypeSelected) 
+        }
         composable(Screen.Historico.route) { HistoricoScreen() }
         composable(Screen.Perfil.route) { PerfilScreen(navController) }
         composable("nfcScan") { NfcScanScreen(navController, nfcCode, onCodeConsumed, onPicagemValia) }
